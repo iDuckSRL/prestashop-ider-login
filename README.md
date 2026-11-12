@@ -1,35 +1,44 @@
-# IDer Login for Prestashop
+# IDer Login for PrestaShop
 
-### Description
-With this module you can provide login and registration process using the IDer Service.
-An additional "Login with IDer" button will appears along the regular one.
+"Sign in with IDer" for PrestaShop 8 and 9: customers sign in and sign up by scanning a QR code with the [IDer](https://www.ider.com) app, without a password. It works like the [IDer Login plugin for WordPress](https://wordpress.org/plugins/ider-login/).
 
-How it works?
-1. First of all you need to create a profile in the [IDer](http://ider.com/ "IDer website") website
-2. Clicking the IDer login button will redirect to the IDer server and a QR Code will be displayed.
-3. To scan it you need to download the free IDer App from the App Store or Google Play depending which cell phone you own.
-   Or just scan the QR code with any QR Code reader and you will be redirect to the download page.  
-   Provide few infos and you are ready to scan the QR code 
-4. After that the IDer App will prompt you for the missing data required to complete the login/registration process.
-   Confirming the data your browser will automatically log you in and show you which info the website saved.
+## Features
 
+- **"Sign in with IDer" button** on the login page, on the registration page and in the checkout ("Personal information" step). Themes can place it anywhere with `{hook h='displayIderLoginButton'}`.
+- **Automatic account:** the customer is found by IDer ID or by email. If there is no account, a new one is created (you can turn this off).
+- **Data kept up to date** at every IDer login: first name, last name, birth date, gender, and an address named "IDer" with province/state, postcode and mobile phone.
+- **"IDer profile" page** in *My account*, showing the data the customer shared at the last login.
+- **Landing pages by scope:** a login from an IDer campaign can lead to a specific page.
+- **GDPR:** export and deletion through the official *psgdpr* module.
 
-### Installation
+## Security
 
-1. Upload the module files to the `/modules/ider_login` directory, or install the module through the Prestashop modules screen directly.
-2. Activate the module through the 'Modules' screen in Prestashop
-3. Edit the module settings.
-4. Configure the module as descripted. You need to create a profile in the [IDer](http://ider.com/ "IDer website")
-5. With the data collected during the profile creation process fill in the Client ID, Client Secret and Campagin ID fields
-6. Change the other settings if you want
+- OpenID Connect authorization code flow. `state` and `nonce` are random, valid for 15 minutes and used only once.
+- RS256 signature of the `id_token` checked against the IDer JWKS keys, together with issuer, audience, expiry and nonce.
+- `userinfo` must return the same subject as the `id_token`.
+- HTTPS only, with certificate verification. Redirects only to addresses of the shop.
+- The client secret is never shown again after saving. Tokens, secrets and personal data are never written to logs.
+- No external dependencies: works with PHP 7.2 to 8.5.
 
+PKCE is off because the IDer server (IdentityServer3) accepts it only for clients set to the "WithProofKey" flow. To turn it on later, see `IderOidcClient::USE_PKCE`.
 
-#### Frequently Asked Questions
+## Installation
 
-* Where can I download the App?
+1. In the back office go to **Modules → Module Manager → Upload a module** and choose `iderlogin-x.y.z.zip`.
+2. Open the module configuration. It shows the exact **callback URL** of your shop, for example `https://your-shop.com/module/iderlogin/callback`.
+3. In the [IDer partner portal](https://partner.ider.com), open **Login Button → Edit**:
+   - framework: **Website**;
+   - authentication request URL: `https://your-shop.com/module/iderlogin/login`;
+   - callback URL: the address from step 2.
+4. Copy **Client Id** and **Client Secret** into the module. Copy the **Scope Name** into "Extra scopes". Save.
 
-  * You can find the IDer app in your App Store or Google Play. Search for "ider".
+## Requirements
 
-* Can I hack/improve/fork/edit this module?
+- PrestaShop 8.0 – 9.x.
+- PHP with `curl`, `openssl` and `json`.
 
-  * Mmmm. Even though we encourage the developing and extension of new modules it doesn't sound like a good idea in this case. This plugin has been very tested and stressed and it should be use as it is. But if you got a brilliant idea or suggestion we would love to hear from you.
+Tested on PrestaShop 8.2.9 and 9.2.1 (PHP 8.4) with the IDer production server.
+
+## License
+
+[Academic Free License 3.0](https://opensource.org/licenses/AFL-3.0)

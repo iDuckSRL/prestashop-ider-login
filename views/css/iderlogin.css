@@ -1,0 +1,20 @@
+/* IDer Login - pulsante e pagina profilo */
+.ider-login { margin: 1.25rem 0; text-align: center; }
+.ider-login__or { position: relative; margin: 0 0 1rem; color: #7a7a7a; font-size: .875rem; }
+.ider-login__or::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px solid #e3e8ef; }
+.ider-login__or span { position: relative; padding: 0 .75rem; background: #fff; }
+.ider-login-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+  min-height: 48px; width: 100%; max-width: 360px; padding: .7rem 1.5rem;
+  border-radius: 12px; background: #1a4e80; color: #fff !important;
+  font-size: 1rem; font-weight: 700; text-decoration: none !important;
+  transition: background-color .2s ease;
+}
+.ider-login-button:hover, .ider-login-button:focus { background: #123a61; }
+.ider-login-button:focus-visible { outline: 3px solid #7db3e8; outline-offset: 2px; }
+.ider-login-button img { width: 22px; height: 22px; }
+.ider-login__hint { margin: .6rem 0 0; color: #5b6676; font-size: .8125rem; }
+.ider-login--custom .ider-login__hint { display: none; }
+.ider-profile__meta { color: #5b6676; font-size: .875rem; }
+.ider-profile__table th { width: 40%; font-weight: 600; }
+.ider-profile__note { margin-top: 1rem; color: #5b6676; font-size: .875rem; }
