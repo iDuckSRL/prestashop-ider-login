@@ -53,6 +53,10 @@ class IderCustomerSync
                 $value = get_object_vars($value);
             }
             if (is_array($value)) {
+                // claim ripetuto (es. email due volte): vale il primo
+                if ($value !== array() && array_keys($value) === range(0, count($value) - 1) && !is_array($value[0])) {
+                    return $decode($value[0]);
+                }
                 foreach ($value as $k => $v) {
                     $value[$k] = $decode($v);
                 }
