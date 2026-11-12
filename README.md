@@ -28,7 +28,7 @@
    - framework: **Website**;
    - authentication request URL: `https://your-shop.com/module/iderlogin/login`;
    - callback URL: the address from step 2.
-4. Copy **Client Id** and **Client Secret** into the module. Copy the **Scope Name** into "Extra scopes". Save.
+4. Copy **Client Id**, **Client Secret** and **Scope Name** into the module and save. A link to the login page with `?scope=<another campaign>` uses that campaign instead (same client, its own callback).
 
 ## Requirements
 

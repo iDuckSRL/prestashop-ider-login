@@ -19,7 +19,7 @@ require_once __DIR__ . '/classes/IderCustomerSync.php';
 
 class IderLogin extends Module
 {
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.1';
 
     /** Impostazioni => valore predefinito */
     const DEFAULTS = array(
@@ -138,7 +138,7 @@ class IderLogin extends Module
         $errors = array();
         $clientId = trim((string) Tools::getValue('IDERLOGIN_CLIENT_ID'));
         $secret = trim((string) Tools::getValue('IDERLOGIN_CLIENT_SECRET'));
-        $scopes = trim(preg_replace('/\s+/', ' ', (string) Tools::getValue('IDERLOGIN_EXTRA_SCOPES')));
+        $scopes = trim((string) Tools::getValue('IDERLOGIN_EXTRA_SCOPES'));
         $welcome = trim((string) Tools::getValue('IDERLOGIN_WELCOME_URL'));
         $landing = $this->cleanLandingPages((string) Tools::getValue('IDERLOGIN_LANDING_PAGES'), $errors);
         $css = (string) Tools::getValue('IDERLOGIN_BUTTON_CSS');
@@ -146,8 +146,8 @@ class IderLogin extends Module
         if ($clientId !== '' && !preg_match('/^[A-Za-z0-9._:\-]{1,191}$/', $clientId)) {
             $errors[] = $this->l('The client ID contains invalid characters.');
         }
-        if ($scopes !== '' && !preg_match('/^[A-Za-z0-9._:\- ]+$/', $scopes)) {
-            $errors[] = $this->l('Extra scopes can contain only letters, numbers, dots, dashes, underscores and spaces.');
+        if ($scopes !== '' && !preg_match('/^[A-Za-z0-9._:\-]{1,100}$/', $scopes)) {
+            $errors[] = $this->l('Enter only the Scope Name of the IDer Login Button (one value, no spaces).');
         }
         if ($welcome !== '' && !$this->isShopUrl($welcome)) {
             $errors[] = $this->l('The page after login must be an address of this shop.');
@@ -263,9 +263,10 @@ class IderLogin extends Module
                     ),
                     array(
                         'type' => 'text',
-                        'label' => $this->l('Extra scopes'),
+                        'label' => $this->l('Scope Name'),
                         'name' => 'IDERLOGIN_EXTRA_SCOPES',
-                        'desc' => $this->l('Optional, separated by spaces (e.g. the scope of an IDer campaign). "openid" is always requested.'),
+                        'required' => true,
+                        'desc' => $this->l('The Scope Name of the IDer Login Button (one value). A link with ?scope= can use another campaign of the same client instead.'),
                     ),
                     $switch('IDERLOGIN_SHOW_LOGIN', $this->l('Button on the login page')),
                     $switch('IDERLOGIN_SHOW_REGISTER', $this->l('Button on the registration page')),

@@ -29,13 +29,14 @@ class IderloginLoginModuleFrontController extends ModuleFrontController
             Tools::redirect($this->context->link->getPageLink('authentication', true));
         }
 
-        // scope extra: impostazioni + "?scope=" (es. link di una campagna IDer)
-        $scopes = array_filter(explode(' ', (string) Configuration::get('IDERLOGIN_EXTRA_SCOPES')));
+        // IDer accetta esattamente "openid" + UNO scope di campagna: quello del link
+        // (?scope=, es. una campagna IDer) sostituisce lo Scope Name delle impostazioni.
+        $scope = trim((string) Configuration::get('IDERLOGIN_EXTRA_SCOPES'));
         $requested = Tools::getValue('scope');
-        if (is_string($requested) && preg_match('/^[A-Za-z0-9._:\- ]{1,200}$/', $requested)) {
-            $scopes = array_merge($scopes, array_filter(explode(' ', $requested)));
+        if (is_string($requested) && preg_match('/^[A-Za-z0-9._:\-]{1,100}$/', $requested)) {
+            $scope = $requested;
         }
-        $scopes = array_values(array_unique($scopes));
+        $scopes = $scope !== '' ? array($scope) : array();
 
         $request = IderOidcClient::newRequest();
         $this->context->cookie->iderlogin_request = json_encode(array(
