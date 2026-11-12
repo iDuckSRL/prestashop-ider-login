@@ -20,8 +20,6 @@
 - The client secret is never shown again after saving. Tokens, secrets and personal data are never written to logs.
 - No external dependencies: works with PHP 7.2 to 8.5.
 
-PKCE is off because the IDer server (IdentityServer3) accepts it only for clients set to the "WithProofKey" flow. To turn it on later, see `IderOidcClient::USE_PKCE`.
-
 ## Installation
 
 1. In the back office go to **Modules → Module Manager → Upload a module** and choose `iderlogin-x.y.z.zip`.
